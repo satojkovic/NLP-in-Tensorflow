@@ -66,8 +66,13 @@ if __name__ == "__main__":
 
     # 8. Plot the history of training
     acc = history.history['accuracy']
+    loss = history.history['loss']
     val_acc = history.history['val_accuracy']
+    val_loss = history.history['val_loss']
     epochs = range(len(acc))
-    plt.plot(epochs, acc, 'r')
-    plt.plot(epochs, val_acc, 'b')
+    plt.plot(epochs, acc, 'r', label='acc')
+    plt.plot(epochs, val_acc, 'b', label='val_acc')
+    plt.plot(epochs, loss, 'r', linestyle='dashed', label='loss')
+    plt.plot(epochs, val_loss, 'b', linestyle='dashed', label='val_loss')
+    plt.legend()
     plt.show()
