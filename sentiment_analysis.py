@@ -5,6 +5,8 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 import tensorflow as tf
 
+import matplotlib.pyplot as plt
+
 if __name__ == "__main__":
     # 1. Load imdb dataset
     imdb, info = tfds.load('imdb_reviews', with_info=True, as_supervised=True)
@@ -60,4 +62,12 @@ if __name__ == "__main__":
     model.summary()
 
     num_epochs = 10
-    model.fit(padded, training_labels, epochs=num_epochs, validation_data=(testing_padded, testing_labels))
+    history = model.fit(padded, training_labels, epochs=num_epochs, validation_data=(testing_padded, testing_labels))
+
+    # 8. Plot the history of training
+    acc = history.history['accuracy']
+    val_acc = history.history['val_accuracy']
+    epochs = range(len(acc))
+    plt.plot(epochs, acc, 'r')
+    plt.plot(epochs, val_acc, 'b')
+    plt.show()
