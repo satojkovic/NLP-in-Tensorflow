@@ -47,8 +47,8 @@ if __name__ == "__main__":
     plt.show()
 
     # 6. Count the number of words
-    def get_top_n_words(corpus, n=20):
-        vectorizer = CountVectorizer()
+    def get_top_n_words(corpus, n=20, is_stop_words=False):
+        vectorizer = CountVectorizer(stop_words='english') if is_stop_words else CountVectorizer()
         X = vectorizer.fit_transform(corpus)
         X_sum = X.sum(axis=0)
         words_freq = [(word, X_sum[0, idx]) for word, idx in vectorizer.vocabulary_.items()]
@@ -58,17 +58,32 @@ if __name__ == "__main__":
     top_n = 20
     positive_words_freq = get_top_n_words(positive_sentences, top_n)
     negative_words_freq = get_top_n_words(negative_sentences, top_n)
+    positive_words_freq_wo_stop_words = get_top_n_words(positive_sentences, top_n, is_stop_words=True)
+    negative_words_freq_wo_stop_words = get_top_n_words(negative_sentences, top_n, is_stop_words=True)
 
-    plt.subplots_adjust(wspace=0.5)
+    plt.subplots_adjust(wspace=0.5, hspace=0.5)
 
     left = range(top_n)
-    plt.subplot(1, 2, 1)
+    plt.subplot(2, 2, 1)
     plt.title('Positive')
     plt.bar(left, [freq for _, freq in positive_words_freq], tick_label=[word for word, _ in positive_words_freq], color='r', width=0.6)
     plt.xticks(rotation=-90, fontsize=8)
 
-    plt.subplot(1, 2, 2)
+    plt.subplot(2, 2, 2)
     plt.title('Negative')
     plt.bar(left, [freq for _, freq in negative_words_freq], tick_label=[word for word, _ in negative_words_freq], color='b', width=0.6)
     plt.xticks(rotation=-90, fontsize=8)
+
+    plt.subplot(2, 2, 3)
+    plt.title('Positive without stop words')
+    plt.bar(left, [freq for _, freq in positive_words_freq_wo_stop_words], 
+        tick_label=[word for word, _ in positive_words_freq_wo_stop_words], color='r', width=0.6)
+    plt.xticks(rotation=-90, fontsize=8)
+
+    plt.subplot(2, 2, 4)
+    plt.title('Negative without stop words')
+    plt.bar(left, [freq for _, freq in negative_words_freq_wo_stop_words], 
+        tick_label=[word for word, _ in negative_words_freq_wo_stop_words], color='b', width=0.6)
+    plt.xticks(rotation=-90, fontsize=8)
+
     plt.show()
